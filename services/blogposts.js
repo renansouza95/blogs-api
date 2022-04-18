@@ -2,8 +2,8 @@ const { BlogPost, PostCategory } = require('../models');
 
 const getAll = async () => {
   try {
-    const [posts] = await BlogPost.findAll();
-    return { status: 200, message: posts };
+    const posts = await BlogPost.findAll();
+    return { status: 200, posts };
   } catch (error) {
     return { status: 500, message: 'Server error' };
   }
@@ -13,7 +13,7 @@ const getById = async (id) => {
   try {
     const post = await BlogPost.findByPk(id);
     if (!post) return { status: 404, message: 'Post does not exist' };
-    return { status: 200, message: post };
+    return { status: 200, post };
   } catch (error) {
     return { status: 500, message: 'Server error' };
   }
@@ -41,7 +41,7 @@ const create = async ({ title, content, userId, categoryIds }) => {
         categoryId: category,
       });
     });
-    return { status: 201, message: post };
+    return { status: 201, post };
   } catch (error) {
     return { status: 500, message: 'Server error' };
   }
