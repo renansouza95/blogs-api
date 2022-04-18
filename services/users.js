@@ -1,8 +1,16 @@
 const { User } = require('../models');
+const Token = require('../middlewares/token');
+
+// como excluir um atributo ao retornar findAll
+// https://stackoverflow.com/questions/31679838/sequelizejs-findall-exclude-field
 
 const getAll = async () => {
   try {
-    const users = await User.findAll();
+    const users = await User.findAll({
+      attributes: {
+        exclude: ['password'],
+      },
+    });
     return { status: 200, message: users };
   } catch (error) {
     return { status: 500, message: 'Server error' };
@@ -27,7 +35,8 @@ const create = async ({ displayName, email, password, image }) => {
     if (exists.length > 0) return { status: 409, message: 'User already registered' };
     const newUser = { displayName, email, password, image };
     await User.create({ newUser });
-    return { status: 201, message: newUser };
+    const token = Token.generateToken(email);
+    return { status: 201, message: token };
   } catch (error) {
     return { status: 500, message: 'Server error' };
   }
