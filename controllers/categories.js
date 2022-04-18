@@ -1,13 +1,16 @@
 const CategoryServices = require('../services/categories');
 
 const getAll = async (req, res) => {
-  const { status, message } = await CategoryServices.getAll();
-  return res.status(status).json(message);
+  const { status, categories, message } = await CategoryServices.getAll();
+  if (status >= 400) return res.status(status).json(message);
+  return res.status(status).json(categories);
 };
 
 const create = async (req, res) => {
-  const { status, message } = await CategoryServices.create(req.body);
-  return res.status(status).json(message);
+  const { name } = req.body;
+  const { status, created, message } = await CategoryServices.create(name);
+  if (status >= 400) return res.status(status).json({ message });
+  return res.status(status).json(created);
 };
 
 module.exports = { getAll, create };

@@ -11,7 +11,7 @@ const getAll = async () => {
         exclude: ['password'],
       },
     });
-    return { status: 200, message: users };
+    return { status: 200, users };
   } catch (error) {
     return { status: 500, message: 'Server error' };
   }
@@ -21,22 +21,22 @@ const getById = async (id) => {
   try {
     const user = await User.findByPk(id);
     if (!user) return { status: 404, message: 'User does not exist' };
-    return { status: 200, message: user };
+    return { status: 200, user };
   } catch (error) {
     return { status: 500, message: 'Server error' };
   }
 };
 
-const create = async ({ displayName, email, password, image }) => {
+const create = async (displayName, email, password, image) => {
   try {
-    const exists = await User.findAll({
+    const [exists] = await User.findAll({
       where: { email },
     });
-    if (exists.length > 0) return { status: 409, message: 'User already registered' };
+    if (exists) return { status: 409, message: 'User already registered' };
     const newUser = { displayName, email, password, image };
-    await User.create({ newUser });
+    await User.create(newUser);
     const token = Token.generateToken(email);
-    return { status: 201, message: token };
+    return { status: 201, token };
   } catch (error) {
     return { status: 500, message: 'Server error' };
   }

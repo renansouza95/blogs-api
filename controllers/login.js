@@ -1,9 +1,10 @@
 const LoginService = require('../services/login');
 
-const getByEmail = async (req, res) => {
+const signIn = async (req, res) => {
   const { email } = req.body;
-  const { status, message } = await LoginService.getByEmail(email);
-  return res.status(status).json(message);
+  const { status, message, token } = await LoginService.getByEmail(email);
+  if (status >= 400) return res.status(status).json({ message });
+  return res.status(status).json({ token });
 };
 
-module.exports = { getByEmail };
+module.exports = { signIn };

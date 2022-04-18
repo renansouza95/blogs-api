@@ -1,10 +1,11 @@
 const express = require('express');
 const PostsController = require('../controllers/blogposts');
+const Auth = require('../middlewares/authentication');
 
 const router = express.Router();
 
-router.get('/', PostsController.getAll);
-router.get('/:id', PostsController.getById);
-router.post('/', PostsController.create);
+router.get('/', Auth.validateToken, PostsController.getAll);
+router.get('/:id', Auth.validateToken, PostsController.getById);
+router.post('/', Auth.authenticatePost, Auth.validateToken, PostsController.create);
 
 module.exports = router;

@@ -19,16 +19,22 @@ const getById = async (id) => {
   }
 };
 
-const create = async ({ title, content, userId, categoryIds }) => {
-  // validar se os parametros estao sendo passados no body usando Middlewares
+const checkCategoryId = async (ids) => {
   try {
-    const post = {
-      title,
-      content,
-      userId,
-    };
+    ids.forEach(async (id) => {
+      const category = await PostCategory.findByPk(id);
+      if (!category) return { status: 400, message: '"categoryIds" not found' };
+    });
+  } catch (error) {
+    return { status: 500, message: 'Server error' };
+  }
+};
+
+const create = async ({ title, content, userId, categoryIds }) => {
+  checkCategoryId(categoryIds);
+  try {
+    const post = { title, content, userId };
     const [{ insertId }] = await BlogPost.create(post);
-    console.log(insertId);
     categoryIds.forEach(async (category) => {
       await PostCategory.create({
         postId: insertId,
