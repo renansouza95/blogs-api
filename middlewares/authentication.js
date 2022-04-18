@@ -34,7 +34,7 @@ const validateToken = (req, res, next) => {
   try {
     Token.decodeToken(authorization);
   } catch (error) {
-    return res.status(401).json({ mesage: 'Expired or invalid token' });
+    return res.status(401).json({ message: 'Expired or invalid token' });
   }
   next();
 };
