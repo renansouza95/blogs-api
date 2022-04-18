@@ -2,7 +2,7 @@ const CategoryServices = require('../services/categories');
 
 const getAll = async (req, res) => {
   const { status, categories, message } = await CategoryServices.getAll();
-  if (status >= 400) return res.status(status).json(message);
+  if (status >= 400) return res.status(status).json({ message });
   return res.status(status).json(categories);
 };
 
