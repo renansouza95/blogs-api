@@ -7,7 +7,7 @@ const getByEmail = async (email) => {
       where: { email },
     });
     if (!check) return { status: 400, message: 'Invalid fields' };
-    const token = Token.generateToken(email);
+    const token = Token.generateToken(email); // posso guardar o userId no token
     return { status: 200, token };
   } catch (error) {
     return { status: 500, message: 'Server error' };
