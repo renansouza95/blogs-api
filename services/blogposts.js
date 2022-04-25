@@ -1,6 +1,7 @@
 const db = require('../models');
 const Token = require('../middlewares/token');
 
+// Feito com ajuda do Rafa Reis na monitoria
 const getAll = async () => {
   try {
     const posts = await db.BlogPost.findAll({
@@ -60,7 +61,7 @@ const getUserId = async (email) => {
 
 const createPostCategory = async (id, category) => {
   try {
-    await db.PostCategory.create({
+    await db.PostsCategory.create({
       postId: id,
       categoryId: category,
     });
@@ -86,14 +87,19 @@ const create = async (title, content, categoryIds, authorization) => {
   }
 };
 
-// const destroy = async (id) => {
-//   try {
-//     await db.BlogPost.destroy({
-//       where: { id },
-//     });
-//   } catch (error) {
-//     return { status: 500, message: error };
-//   }
-// };
+const destroy = async (id, authorization) => {
+  try {
+    const checkPost = await db.BlogPost.findOne({ where: { id } });
+    if (!checkPost) return { status: 404, message: 'Post does not exist' };
+    const { data } = Token.decodeToken(authorization); // object.data = email do usuario
+    const userId = await getUserId(data);
+    if (checkPost.userId !== userId) return { status: 401, message: 'Unauthorized user' };
+    await db.PostsCategory.destroy({ where: { postId: id } });
+    await db.BlogPost.destroy({ where: { id, userId } });
+    return { status: 204 };
+  } catch (error) {
+    return { status: 500, message: error };
+  }
+};
 
-module.exports = { getAll, getById, create };
+module.exports = { getAll, getById, create, destroy };

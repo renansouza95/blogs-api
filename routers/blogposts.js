@@ -6,7 +6,8 @@ const router = express.Router();
 
 router.get('/', Auth.validateToken, PostsController.getAll);
 router.get('/:id', Auth.validateToken, PostsController.getById);
+router.delete('/:id', Auth.validateToken, PostsController.destroy);
 router.post('/', Auth.authenticatePost, Auth.validateToken, PostsController.create);
-// router.delete('/:id', Auth.validateToken, PostsController.destr);
+// router.delete('/:id', Auth.validateToken, PostsController.destroy);
 
 module.exports = router;

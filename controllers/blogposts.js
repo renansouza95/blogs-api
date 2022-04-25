@@ -23,9 +23,12 @@ const create = async (req, res) => {
   return res.status(status).json(created);
 };
 
-// const destroy = async (req, res) => {
-//   const { id } = req.params;
-//   const {  }
-// }
+const destroy = async (req, res) => {
+  const { id } = req.params;
+  const { authorization } = req.headers;
+  const { status, message } = await PostsService.destroy(id, authorization);
+  if (status >= 400) return res.status(status).json({ message });
+  res.status(status).end();
+};
 
-module.exports = { getAll, getById, create };
+module.exports = { getAll, getById, create, destroy };
