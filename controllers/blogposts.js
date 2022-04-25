@@ -23,4 +23,9 @@ const create = async (req, res) => {
   return res.status(status).json(created);
 };
 
+// const destroy = async (req, res) => {
+//   const { id } = req.params;
+//   const {  }
+// }
+
 module.exports = { getAll, getById, create };
