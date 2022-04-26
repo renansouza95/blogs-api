@@ -94,7 +94,6 @@ const destroy = async (id, authorization) => {
     const { data } = Token.decodeToken(authorization); // object.data = email do usuario
     const userId = await getUserId(data);
     if (checkPost.userId !== userId) return { status: 401, message: 'Unauthorized user' };
-    await db.PostsCategory.destroy({ where: { postId: id } });
     await db.BlogPost.destroy({ where: { id, userId } });
     return { status: 204 };
   } catch (error) {

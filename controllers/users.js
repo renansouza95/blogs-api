@@ -21,7 +21,13 @@ const create = async (req, res) => {
   const { displayName, email, password, image } = req.body;
   const { status, message, token } = await UserService.create(displayName, email, password, image);
   if (status >= 400) return res.status(status).json({ message });
-  res.status(status).json({ token });
+  return res.status(status).json({ token });
 };
 
-module.exports = { getAll, getById, create };
+const destroy = async (req, res) => {
+  const { authorization } = req.headers;
+  const { status } = await UserService.destroy(authorization);
+  return res.status(status).end();
+};
+
+module.exports = { getAll, getById, create, destroy };

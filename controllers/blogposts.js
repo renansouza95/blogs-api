@@ -28,7 +28,7 @@ const destroy = async (req, res) => {
   const { authorization } = req.headers;
   const { status, message } = await PostsService.destroy(id, authorization);
   if (status >= 400) return res.status(status).json({ message });
-  res.status(status).end();
+  return res.status(status).end();
 };
 
 module.exports = { getAll, getById, create, destroy };
