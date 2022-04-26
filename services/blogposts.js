@@ -87,6 +87,23 @@ const create = async (title, content, categoryIds, authorization) => {
   }
 };
 
+const update = async (id, authorization, title, content) => {
+  try {
+    const checkPost = await db.BlogPost.findOne({ where: { id } });
+    const { data } = Token.decodeToken(authorization); // object.data = email do usuario
+    const userId = await getUserId(data);
+    if (checkPost.userId !== userId) return { status: 401, message: 'Unauthorized user' };
+    await db.BlogPost.update({ title, content }, { where: { id } });
+    const updated = await db.BlogPost.findOne({
+      where: { id },
+      include: { model: db.Category, as: 'categories', through: { attributes: [] } },
+    });
+    return { status: 200, updated };
+  } catch (error) {
+    return { status: 500, message: error };
+  }
+};
+
 const destroy = async (id, authorization) => {
   try {
     const checkPost = await db.BlogPost.findOne({ where: { id } });
@@ -101,4 +118,4 @@ const destroy = async (id, authorization) => {
   }
 };
 
-module.exports = { getAll, getById, create, destroy };
+module.exports = { getAll, getById, create, update, destroy };

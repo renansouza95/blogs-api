@@ -1,9 +1,15 @@
 const Joi = require('joi');
 
-const postSchema = Joi.object({
+const create = Joi.object({
   title: Joi.string().required(),
   content: Joi.string().required(),
   categoryIds: Joi.array().required(),
 });
 
-module.exports = postSchema;
+const update = Joi.object({
+  title: Joi.string().required(),
+  content: Joi.string().required(),
+  categoryIds: Joi.any().forbidden().error(new Error('Categories cannot be edited')),
+});
+
+module.exports = { create, update };

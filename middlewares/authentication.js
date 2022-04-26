@@ -2,7 +2,7 @@ const Token = require('./token');
 const userSchema = require('./joi/users');
 const loginSchema = require('./joi/login');
 const categorySchema = require('./joi/categories');
-const postSchema = require('./joi/blogpost');
+const postShema = require('./joi/blogpost');
 
 const authenticateUser = (req, res, next) => {
   const { error } = userSchema.validate(req.body);
@@ -23,7 +23,13 @@ const authenticateCategory = (req, res, next) => {
 };
 
 const authenticatePost = (req, res, next) => {
-  const { error } = postSchema.validate(req.body);
+  const { error } = postShema.create.validate(req.body);
+  if (error) return res.status(400).json({ message: error.message });
+  next();
+};
+
+const authenticateUpdate = (req, res, next) => {
+  const { error } = postShema.update.validate(req.body);
   if (error) return res.status(400).json({ message: error.message });
   next();
 };
@@ -44,5 +50,6 @@ module.exports = {
   authenticateLogin,
   authenticateCategory,
   authenticatePost,
+  authenticateUpdate,
   validateToken,
 };
