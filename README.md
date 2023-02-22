@@ -12,12 +12,29 @@ A proposta do projeto era a criação de um back-end de um blog utilizando o seq
 - JWT;
 - Node-JS;
 
+
+
+### Instruções para clonar o projeto
+
+1. Clone o repositório
+
+   - `git clone git@github.com:renansouza95/blogs-api.git`
+
+   - Entre na pasta que você acabou de clonar:
+
+     `cd blogs-api`
+
+2. Instale as dependências e inicialize o projeto
+
+     * Instale as dependências:
+
+       `npm install`
+
+
+
 ### Funcionamento
 
 Para testar o funcionamento da aplicação, serão necessárias algumas configurações iniciais:
-
-- Depois de forkar e clonar a aplicação:<br><br>
-`npm install` - Para instalação das dependências;<br>
 
 - Para a conexão e manipulação do banco de dados, é necessário que o mesmo esteja instalado na máquina (MYSQL) e a criação na raiz do projeto e configuração do arquivo .env, conforme segue abaixo:<br><br>
 `MYSQL_USER=usuário_MySQL`<br>
